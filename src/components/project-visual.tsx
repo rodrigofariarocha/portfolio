@@ -74,8 +74,8 @@ function Tile({ project }: { project: Project }) {
 function LogoMark({ src, name }: { src: string; name: string }) {
   return (
     <div className="absolute inset-0 grid place-items-center">
-      <div className="relative size-24 drop-shadow-[0_8px_18px_rgba(0,0,0,0.12)] transition-transform duration-500 ease-(--ease-out) sm:size-28 md:group-hover:-translate-y-1.5 md:group-hover:scale-[1.04]">
-        <Image src={src} alt={name} fill sizes="112px" className="object-contain" />
+      <div className="relative size-14 drop-shadow-[0_6px_14px_rgba(0,0,0,0.12)] transition-transform duration-500 ease-(--ease-out) sm:size-16 md:group-hover:-translate-y-1.5 md:group-hover:scale-[1.04]">
+        <Image src={src} alt={name} fill sizes="64px" className="object-contain" />
       </div>
     </div>
   );

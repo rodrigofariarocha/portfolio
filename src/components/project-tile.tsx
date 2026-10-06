@@ -46,7 +46,7 @@ export function ProjectTile({
           {project.tagline[locale]}
         </p>
 
-        <div className="mt-5 flex items-center justify-between gap-4 pt-1">
+        <div className="mt-auto flex items-center justify-between gap-4 pt-6">
           <ul className="flex items-center gap-2.5">
             {marks.slice(0, 5).map((tech) => (
               <li key={tech} title={tech}>
