@@ -23,14 +23,14 @@ export const skillGroups: SkillGroup[] = [
   },
   {
     key: "backend",
-    items: ["Go (Golang)", ".NET MVC", "C#", "Python", "PHP", "REST APIs", "Node.js"],
+    items: ["Go (Golang)", "ASP.NET MVC", "C#", "C", "Python", "PHP", "REST APIs", "Node.js"],
   },
   {
     key: "data",
-    items: ["PostgreSQL", "SQL Server", "Entity Framework Core", "SQL"],
+    items: ["PostgreSQL", "Supabase", "SQL Server", "Entity Framework Core", "SQL"],
   },
   {
     key: "tools",
-    items: ["Git", "GitHub", "Linux", "Debian", "VS Code", "Azure", "Vercel"],
+    items: ["Git", "GitHub", "Linux", "Bash", "Debian", "VS Code", "Microsoft Azure", "Vercel"],
   },
 ];

@@ -124,7 +124,7 @@ export const education: TimelineEntry[] = [
         "Database administration: SQL and PostgreSQL.",
       ],
     },
-    tags: ["Flutter", "C#", ".NET MVC", "PostgreSQL"],
+    tags: ["Flutter", "C#", "ASP.NET MVC", "PostgreSQL"],
   },
 ];
 
