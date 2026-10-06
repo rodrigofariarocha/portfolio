@@ -126,7 +126,7 @@ export const projects: Project[] = [
       },
       {
         label: { pt: "Apresentação da PAP (vídeo)", en: "Final project presentation (video)" },
-        href: "https://www.youtube.com/watch?v=UTRA2hjZxL0&t=180s",
+        href: "https://www.youtube.com/watch?v=UTRA2hjZxL0&t=150s",
       },
       {
         label: { pt: "Versão em WordPress (vídeo)", en: "WordPress version (video)" },
@@ -136,11 +136,11 @@ export const projects: Project[] = [
     videos: [
       {
         id: "UTRA2hjZxL0",
-        start: 180,
+        start: 150,
         title: { pt: "Apresentação da PAP", en: "Final project presentation" },
         caption: {
-          pt: "A apresentação da MacroMath na Escola Digital, avaliada com 20. Começa no minuto 3.",
-          en: "Presenting MacroMath at Escola Digital, graded 20/20. Starts at minute 3.",
+          pt: "A apresentação da MacroMath na Escola Digital, avaliada com 20. Começa aos 2:30.",
+          en: "Presenting MacroMath at Escola Digital, graded 20/20. Starts at 2:30.",
         },
       },
       {
