@@ -15,7 +15,13 @@ type Localized = Record<Locale, string>;
 export type Shot = { src: string; kind: "phone" | "web"; caption: Localized };
 
 /** A YouTube video, embedded on the project's page. `id` is the part after youtu.be/. */
-export type Video = { id: string; title: Localized; caption?: Localized };
+export type Video = {
+  id: string;
+  title: Localized;
+  caption?: Localized;
+  /** Seconds into the video to start from, for a clip inside a longer recording. */
+  start?: number;
+};
 
 export type Project = {
   slug: string;
@@ -60,8 +66,8 @@ export const projects: Project[] = [
     year: "2025 — 2026",
     featured: true,
     context: {
-      pt: "Prova de Aptidão Profissional — nota 19/20",
-      en: "Final course project — graded 19/20",
+      pt: "Prova de Aptidão Profissional — nota 20/20",
+      en: "Final course project — graded 20/20",
     },
     tagline: {
       pt: "App de nutrição com IA para iOS e Android",
@@ -119,11 +125,24 @@ export const projects: Project[] = [
         href: "https://ui.macromath.app/en",
       },
       {
+        label: { pt: "Apresentação da PAP (vídeo)", en: "Final project presentation (video)" },
+        href: "https://www.youtube.com/watch?v=UTRA2hjZxL0&t=180s",
+      },
+      {
         label: { pt: "Versão em WordPress (vídeo)", en: "WordPress version (video)" },
         href: "https://youtu.be/bsuSkmbnwQg",
       },
     ],
     videos: [
+      {
+        id: "UTRA2hjZxL0",
+        start: 180,
+        title: { pt: "Apresentação da PAP", en: "Final project presentation" },
+        caption: {
+          pt: "A apresentação da MacroMath na Escola Digital, avaliada com 20. Começa no minuto 3.",
+          en: "Presenting MacroMath at Escola Digital, graded 20/20. Starts at minute 3.",
+        },
+      },
       {
         id: "bsuSkmbnwQg",
         title: { pt: "MacroMath em WordPress", en: "MacroMath on WordPress" },

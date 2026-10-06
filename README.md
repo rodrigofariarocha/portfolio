@@ -353,7 +353,7 @@ Every push to `main` then deploys to production, and every other branch gets a p
 
 | Project | What it is | Stack |
 | --- | --- | --- |
-| **[MacroMath](https://macromath.app)** | Final course project (19/20): an AI nutrition app for iOS and Android, with a marketing site, its own docs and a shared design system | Flutter · Dart · Supabase · Gemini · Astro · Stripe |
+| **[MacroMath](https://macromath.app)** | Final course project (20/20): an AI nutrition app for iOS and Android, with a marketing site, its own docs and a shared design system | Flutter · Dart · Supabase · Gemini · Astro · Stripe |
 | **RochaCinema** | Cinema management and ticket booking platform — live seat selection, PDF tickets with QR codes, a loyalty programme | ASP.NET Core 9 · C# · EF Core · SQL Server |
 | **[Bedsgone](https://bedsgone-prototype.vercel.app)** | Client prototype for a mattress pickup service — a hand-built three.js hero and a five-step booking wizard priced live | Astro · Tailwind CSS · three.js · GSAP |
 | **[Hardware Diagnostics Pipeline](https://csv-convert-virid.vercel.app)** | Erasmus+ internship in Athens: a bootable Debian diagnostics USB plus a browser-side converter feeding NGSI-LD entities to an Orion-LD broker | Astro · React · TypeScript · Python · Linux |

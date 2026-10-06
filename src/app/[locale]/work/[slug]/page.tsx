@@ -294,7 +294,7 @@ function VideoList({ videos, locale }: { videos: Video[]; locale: Locale }) {
         <figure key={video.id} className="m-0">
           <div className="overflow-hidden rounded-2xl bg-black ring-1 ring-[var(--hairline)]">
             <iframe
-              src={`https://www.youtube-nocookie.com/embed/${video.id}?rel=0`}
+              src={`https://www.youtube-nocookie.com/embed/${video.id}?rel=0${video.start ? `&start=${video.start}` : ""}`}
               title={video.title[locale]}
               loading="lazy"
               allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
