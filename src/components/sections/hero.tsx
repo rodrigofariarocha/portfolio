@@ -25,15 +25,7 @@ export function Hero({ dict, locale }: { dict: Dictionary; locale: Locale }) {
       />
 
       <div>
-        <p
-          style={step(0)}
-          className={`${enter} inline-flex items-center gap-2 rounded-full bg-accent-soft px-3 py-1.5 text-[13px] text-text-muted`}
-        >
-          <span aria-hidden className="size-1.5 rounded-full bg-emerald-500" />
-          {hero.status}
-        </p>
-
-        <h1 style={step(1)} className={`${enter} type-display mt-6`}>
+        <h1 style={step(1)} className={`${enter} type-display`}>
           {site.name}
         </h1>
 

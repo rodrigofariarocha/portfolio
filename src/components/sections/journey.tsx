@@ -1,4 +1,5 @@
-import { Award, Trophy } from "lucide-react";
+import { Award, ExternalLink, Play, Trophy } from "lucide-react";
+import Image from "next/image";
 
 import { Timeline } from "@/components/timeline";
 import { Reveal } from "@/components/ui/reveal";
@@ -40,10 +41,33 @@ export function Journey({ dict, locale }: { dict: Dictionary; locale: Locale }) 
             <ul className="mt-5 space-y-3">
               {certifications.map((certification) => (
                 <li key={certification.id}>
-                  <p className="text-[15px] font-medium">{certification.name}</p>
-                  <p className="mt-1 text-[14px] text-text-muted">
-                    {certification.issuer}
-                  </p>
+                  {/* The badge is the credential: the whole row opens it on Credly. */}
+                  <a
+                    href={certification.href}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="group -m-2 flex items-center gap-4 rounded-xl p-2 transition-colors duration-300 hover:bg-accent-soft"
+                  >
+                    <Image
+                      src={certification.badge}
+                      alt=""
+                      width={64}
+                      height={64}
+                      className="size-16 shrink-0"
+                    />
+                    <span className="min-w-0">
+                      <span className="block text-[15px] font-medium leading-snug">
+                        {certification.name}
+                      </span>
+                      <span className="mt-1 block text-[14px] text-text-muted">
+                        {certification.issuer} · {certification.issued[locale]}
+                      </span>
+                      <span className="mt-1.5 inline-flex items-center gap-1.5 text-[13px] text-text-faint transition-colors duration-300 group-hover:text-text">
+                        {dict.experience.viewCredential}
+                        <ExternalLink aria-hidden className="size-3" />
+                      </span>
+                    </span>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -63,6 +87,17 @@ export function Journey({ dict, locale }: { dict: Dictionary; locale: Locale }) 
                   <p className="mt-1 text-[14px] text-text-muted">
                     {activity.detail[locale]}
                   </p>
+                  {activity.video ? (
+                    <a
+                      href={activity.video}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="mt-1.5 inline-flex items-center gap-1.5 text-[13px] text-text-faint transition-colors duration-300 hover:text-text"
+                    >
+                      <Play aria-hidden className="size-3" />
+                      {dict.experience.watchVideo}
+                    </a>
+                  ) : null}
                 </li>
               ))}
             </ul>

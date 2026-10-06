@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 
+import { Intro } from "@/components/intro";
 import { Providers } from "@/components/providers";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteNav } from "@/components/site-nav";
@@ -116,6 +117,8 @@ export default async function LocaleLayout({
       suppressHydrationWarning
     >
       <body>
+        {/* First in the body, so it covers the page from the first paint. */}
+        <Intro role={dict.hero.role} />
         {/* Scroll reveals start at opacity 0 and are switched on by an observer.
             Without JS there is no observer, so unlock them outright. */}
         <noscript>

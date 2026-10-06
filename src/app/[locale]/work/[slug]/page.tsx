@@ -1,20 +1,18 @@
-import { ArrowRight, ExternalLink, Lock } from "lucide-react";
+import { ArrowRight, ExternalLink, Info, Lock } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { LivePreview } from "@/components/live-preview";
-import {
-  ProjectShots,
-  ProjectVisual,
-  hasIllustration,
-} from "@/components/project-visual";
+import { MediaTabs, type MediaTab } from "@/components/media-tabs";
+import { ProjectVisual, hasIllustration } from "@/components/project-visual";
+import { ShotGallery } from "@/components/shot-gallery";
 import { GithubIcon } from "@/components/ui/brand-icons";
 import { PageHeader, PageShell } from "@/components/ui/page";
 import { Reveal } from "@/components/ui/reveal";
 import { TechIcon } from "@/components/ui/tech-icon";
-import { projects } from "@/content/projects";
-import { isLocale, locales } from "@/lib/i18n/config";
+import { projects, type Video } from "@/content/projects";
+import { isLocale, locales, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 
 export function generateStaticParams() {
@@ -53,17 +51,75 @@ export default async function ProjectPage({
 
   const dict = getDictionary(locale);
   const labels = dict.projects;
-  const next = projects[(index + 1) % projects.length];
+  // The last project does not wrap round to the first: it hands the visitor
+  // back to the site, at the section that follows the work grid.
+  const next = projects[index + 1];
+  const onward = next
+    ? { href: `/${locale}/work/${next.slug}`, label: labels.nextProject, title: next.name }
+    : { href: `/${locale}#journey`, label: labels.backToSite, title: dict.nav.tabs.journey };
 
   // An illustration is a stand-in for having nothing to show. A live embed is
   // better proof than a drawing, so it replaces the drawing rather than joining it.
   const showIllustration =
     !project.shots?.length && !project.embed && hasIllustration(project.slug);
 
-  // With none of the three there is nothing to frame, so the panel is dropped
-  // rather than left as an empty box.
-  const hasMedia =
-    Boolean(project.shots?.length || project.embed) || showIllustration;
+  // Each kind of proof is one group: the app, the web, videos, the live site.
+  const shots = project.shots ?? [];
+  const phones = shots.filter((shot) => shot.kind === "phone");
+  const webs = shots.filter((shot) => shot.kind === "web");
+  const galleryLabels = {
+    closeLabel: labels.closeImage,
+    previousLabel: labels.previousImage,
+    nextLabel: labels.nextImage,
+  };
+
+  const media: (MediaTab & { heading: string })[] = [];
+  if (phones.length > 0) {
+    media.push({
+      id: "app",
+      label: labels.appScreens,
+      heading: labels.appScreens,
+      content: <ShotGallery shots={phones} locale={locale} kind="phone" {...galleryLabels} />,
+    });
+  }
+  if (webs.length > 0) {
+    media.push({
+      id: "web",
+      label: labels.onTheWeb,
+      heading: labels.onTheWeb,
+      content: <ShotGallery shots={webs} locale={locale} kind="web" {...galleryLabels} />,
+    });
+  }
+  if (project.videos?.length) {
+    media.push({
+      id: "video",
+      label: labels.videos,
+      heading: labels.videos,
+      content: <VideoList videos={project.videos} locale={locale} />,
+    });
+  }
+  if (project.embed) {
+    media.push({
+      id: "live",
+      label: labels.liveTab,
+      heading: labels.liveSite,
+      content: (
+        <LivePreview
+          url={project.embed}
+          label={project.name}
+          expandLabel={labels.expandSite}
+          closeLabel={labels.closeSite}
+        />
+      ),
+    });
+  }
+
+  // With more than one group, the groups sit behind tabs and show one at a
+  // time rather than stacking down the page under their own headings.
+  const tabbed = media.length >= 2;
+
+  // With nothing to frame the panel is dropped rather than left as an empty box.
+  const hasMedia = media.length > 0 || showIllustration;
 
   const facts = [
     { label: labels.contextLabel, value: project.context[locale] },
@@ -151,6 +207,12 @@ export default async function ProjectPage({
             <h2 className="type-label mb-2.5 mt-6 px-4 text-text-faint">
               {labels.linksLabel}
             </h2>
+            {project.notice ? (
+              <p className="mb-3 flex gap-2.5 rounded-2xl bg-bg-subtle px-4 py-3 text-pretty text-[13px] leading-relaxed text-text-muted">
+                <Info aria-hidden className="mt-0.5 size-4 shrink-0 text-text-faint" />
+                {project.notice[locale]}
+              </p>
+            ) : null}
             <div className="space-y-2">
               {project.repo ? (
                 <LinkButton href={project.repo} label={labels.viewCode} primary>
@@ -182,47 +244,38 @@ export default async function ProjectPage({
       {hasMedia ? (
         <Reveal>
           <div className="mt-14 space-y-12 rounded-[28px] bg-bg-subtle px-5 py-10 sm:px-8">
-            {project.shots?.length ? (
-              <ProjectShots project={project} locale={locale} labels={labels} />
-            ) : null}
-
             {showIllustration ? (
               <div className="mx-auto max-w-md">
-                <ProjectVisual
-                  project={project}
-                  locale={locale}
-                  variant="full"
-                />
+                <ProjectVisual project={project} variant="full" />
               </div>
             ) : null}
 
-            {project.embed ? (
-              <section>
-                <h2 className="type-label mb-5 text-center text-text-faint">
-                  {labels.liveSite}
-                </h2>
-                <LivePreview
-                  url={project.embed}
-                  label={project.name}
-                  expandLabel={labels.expandSite}
-                  closeLabel={labels.closeSite}
-                />
-              </section>
-            ) : null}
+            {tabbed ? (
+              <MediaTabs tabs={media} label={labels.mediaLabel} />
+            ) : (
+              media.map((group) => (
+                <section key={group.id}>
+                  <h2 className="type-label mb-5 text-center text-text-faint">
+                    {group.heading}
+                  </h2>
+                  {group.content}
+                </section>
+              ))
+            )}
           </div>
         </Reveal>
       ) : null}
 
       <Reveal>
         <Link
-          href={`/${locale}/work/${next.slug}`}
+          href={onward.href}
           className="group mt-16 flex items-center justify-between gap-6 rounded-[24px] bg-bg-subtle px-6 py-6 transition-transform duration-300 ease-(--ease-out) md:hover:-translate-y-1"
         >
           <span>
             <span className="type-label block text-text-faint">
-              {labels.nextProject}
+              {onward.label}
             </span>
-            <span className="type-heading mt-2 block">{next.name}</span>
+            <span className="type-heading mt-2 block">{onward.title}</span>
           </span>
           <ArrowRight
             aria-hidden
@@ -231,6 +284,32 @@ export default async function ProjectPage({
         </Link>
       </Reveal>
     </PageShell>
+  );
+}
+
+function VideoList({ videos, locale }: { videos: Video[]; locale: Locale }) {
+  return (
+    <div className="mx-auto max-w-3xl space-y-8">
+      {videos.map((video) => (
+        <figure key={video.id} className="m-0">
+          <div className="overflow-hidden rounded-2xl bg-black ring-1 ring-[var(--hairline)]">
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${video.id}?rel=0`}
+              title={video.title[locale]}
+              loading="lazy"
+              allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+              className="block aspect-video w-full border-0"
+            />
+          </div>
+          <figcaption className="mt-3 text-center text-[13px] text-text-muted">
+            <span className="font-medium text-text">{video.title[locale]}</span>
+            {video.caption ? <> — {video.caption[locale]}</> : null}
+          </figcaption>
+        </figure>
+      ))}
+    </div>
   );
 }
 

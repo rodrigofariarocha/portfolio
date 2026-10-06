@@ -131,8 +131,12 @@ export const education: TimelineEntry[] = [
 export const certifications = [
   {
     id: "az-900",
-    name: "Microsoft Certified: Azure Fundamentals (AZ-900)",
+    name: "Microsoft Certified: Azure Fundamentals (AZ‑900)",
     issuer: "Microsoft",
+    issued: { pt: "Novembro de 2025", en: "November 2025" } satisfies Localized,
+    /** The Credly badge, saved locally from the credential below. */
+    badge: "/certifications/az-900.png",
+    href: "https://www.credly.com/badges/7faff002-5e7e-46a6-8cb5-5d93c93307c5/public_url",
   },
 ];
 
@@ -147,5 +151,6 @@ export const extracurricular = [
       pt: "Queijas e Benfica / A.F. Lisboa · 2023/2024",
       en: "Queijas e Benfica / A.F. Lisboa · 2023/2024",
     } satisfies Localized,
+    video: "https://www.youtube.com/watch?v=f0gQsIwtP2g",
   },
 ];

@@ -35,8 +35,9 @@ export function Logo({ className }: { className?: string }) {
       aria-label="RR"
       className={className}
     >
-      <path d={letter(1.2)} />
-      <path d={letter(1.2 + PITCH)} />
+      {/* pathLength lets the intro draw each letter in without measuring it. */}
+      <path d={letter(1.2)} pathLength={1} />
+      <path d={letter(1.2 + PITCH)} pathLength={1} />
     </svg>
   );
 }

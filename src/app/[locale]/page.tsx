@@ -22,7 +22,7 @@ export default async function HomePage({
 
   return (
     <>
-      <div className="animate-[rise_420ms_var(--ease-out)_both] px-5 pb-16 pt-24 sm:pt-28">
+      <div className="after-intro animate-[rise_420ms_var(--ease-out)_both] px-5 pb-16 pt-24 sm:pt-28">
         <div className="mx-auto w-full max-w-5xl">
           <Hero dict={dict} locale={locale} />
         </div>

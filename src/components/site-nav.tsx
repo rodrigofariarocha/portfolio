@@ -70,7 +70,7 @@ export function SiteNav({ locale, nav }: { locale: Locale; nav: Dictionary["nav"
       {/* Top bar. Translucent, with the page scrolling underneath it. */}
       <header className="material fixed inset-x-0 top-0 z-50 border-b border-[var(--hairline)]">
         <div className="mx-auto flex h-14 w-full max-w-5xl items-center justify-between gap-4 px-5">
-          <Link href={hrefFor(locale, "")} aria-label={nav.tabs.home} className="pressable">
+          <Link href={hrefFor(locale, "")} aria-label={nav.tabs.home} className="pressable intro-target">
             <Logo className="h-7 w-auto" />
           </Link>
 

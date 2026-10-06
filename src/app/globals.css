@@ -166,6 +166,21 @@ body {
 }
 
 /* ---------------------------------------------------------------------------
+   Project tiles — the page's own surface, washed with a little of the
+   project's brand colour and lit from the top left. Mixed into --bg rather
+   than painted over it, so the same tint works in both themes.
+   --------------------------------------------------------------------------- */
+.tile-wash {
+  --tint: var(--text-faint);
+  background-color: color-mix(in oklab, var(--tint) 10%, var(--bg));
+  background-image: radial-gradient(
+    120% 90% at 0% 0%,
+    color-mix(in oklab, var(--tint) 26%, transparent),
+    transparent 62%
+  );
+}
+
+/* ---------------------------------------------------------------------------
    Materials — translucent chrome with content scrolling underneath.
    --------------------------------------------------------------------------- */
 .material {
@@ -272,6 +287,155 @@ body {
     transparent
   );
   mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+   Intro — the entry sequence (src/components/intro.tsx).
+
+   0.15s   first R draws itself; the second follows at 0.40s
+   0.85s   name and role rise in underneath
+   1.65s   name and role fade
+   1.85s   the monogram glides and shrinks into its slot in the nav bar
+   1.95s   the veil fades and the page shows through
+   2.10s   the hero rises in (.after-intro)
+   2.65s   the nav's own logo takes over and the intro is gone
+
+   The slot is computed from the header's own layout: a max-w-5xl (64rem)
+   container with 1.25rem of padding, h-14 tall with a h-7 logo — so 20px from
+   the left on narrow screens, 50% − 492px once the container stops growing,
+   and 14px from the top.
+   --------------------------------------------------------------------------- */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  /* Only the veil takes clicks, and only until it has faded. */
+  pointer-events: none;
+  animation: intro-done 0s 2.7s forwards;
+}
+
+.intro-veil {
+  position: fixed;
+  inset: 0;
+  background-color: var(--bg);
+  pointer-events: auto;
+  animation: intro-fade 0.6s var(--ease-out) 1.95s forwards;
+}
+
+.intro-stage {
+  position: fixed;
+  inset: 0;
+}
+
+.intro-mark {
+  --dock-left: 20px;
+
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 64px;
+  width: auto;
+  color: var(--text);
+  transform: translate(-50%, -50%);
+  animation: intro-dock 0.8s var(--ease-sheet) 1.85s forwards;
+}
+
+@media (min-width: 1024px) {
+  .intro-mark {
+    --dock-left: calc(50% - 492px);
+  }
+}
+
+/* The Logo sets pathLength="1", so a dash of 1 is the whole stroke. */
+.intro-mark path {
+  stroke-dasharray: 1 2;
+  stroke-dashoffset: 1;
+  animation: intro-draw 0.9s var(--ease-in-out) 0.15s both;
+}
+
+.intro-mark path:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+.intro-name {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(50% + 50px);
+  text-align: center;
+  color: var(--text);
+  animation:
+    intro-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.85s both,
+    intro-fade 0.35s ease 1.65s forwards;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-intro-played]) .after-intro {
+    animation-delay: 2.1s;
+  }
+
+  /* The nav's logo waits, invisible, for the monogram to land on it. */
+  html:not([data-intro-played]) .intro-target {
+    opacity: 0;
+    animation: intro-reveal 0s 2.65s forwards;
+  }
+}
+
+/* Seen this session, or motion turned off: no intro at all. */
+html[data-intro-played] .intro {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro {
+    display: none;
+  }
+}
+
+@keyframes intro-draw {
+  from {
+    stroke-opacity: 0;
+  }
+  8% {
+    stroke-opacity: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes intro-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+@keyframes intro-dock {
+  to {
+    left: var(--dock-left);
+    top: 14px;
+    height: 28px;
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes intro-fade {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes intro-reveal {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes intro-done {
+  to {
+    visibility: hidden;
+  }
 }
 
 /* ---------------------------------------------------------------------------

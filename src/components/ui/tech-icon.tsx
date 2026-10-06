@@ -1,4 +1,4 @@
-import { Cloud, Code2, Database, Sparkles, type LucideIcon } from "lucide-react";
+import { Cloud, Code2, Database, MousePointer2, Sparkles, type LucideIcon } from "lucide-react";
 import {
   siAppstore,
   siAstro,
@@ -13,6 +13,7 @@ import {
   siGnubash,
   siGo,
   siGooglegemini,
+  siGsap,
   siGoogleplay,
   siHtml5,
   siJavascript,
@@ -28,6 +29,7 @@ import {
   siSupabase,
   siTailwindcss,
   siThemoviedatabase,
+  siThreedotjs,
   siTypescript,
   siVercel,
 } from "simple-icons";
@@ -72,6 +74,8 @@ const BRANDS: Record<string, Brand> = {
   "REST APIs": siOpenapiinitiative,
   "TMDB API": siThemoviedatabase,
   Supabase: siSupabase,
+  "three.js": siThreedotjs,
+  GSAP: siGsap,
   Stripe: siStripe,
   "App Store": siAppstore,
   "Google Play": siGoogleplay,
@@ -90,6 +94,8 @@ const LUCIDE: Record<string, LucideIcon> = {
   "VS Code": Code2,
   Azure: Cloud,
   "IA / AI": Sparkles,
+  // Lenis, the smooth-scroll library, has no mark in Simple Icons.
+  Lenis: MousePointer2,
 };
 
 /**

@@ -40,7 +40,6 @@ const pt = {
     back: "Voltar",
   },
   hero: {
-    status: "Disponível para novos projetos",
     role: "Full Stack Developer",
     headline: "Construo software web que funciona bem e sente-se melhor.",
     intro:
@@ -51,7 +50,7 @@ const pt = {
   },
   home: {
     workHeading: "Projetos selecionados",
-    workSub: "Quatro projetos que resumem bem como trabalho.",
+    workSub: "Cinco projetos que resumem bem como trabalho.",
     viewAllWork: "Ver todos os projetos",
     ctaHeading: "Vamos trabalhar juntos?",
     ctaBody:
@@ -95,6 +94,9 @@ const pt = {
     appScreens: "A app",
     onTheWeb: "Na web",
     liveSite: "O site, ao vivo",
+    videos: "Em vídeo",
+    liveTab: "Ao vivo",
+    mediaLabel: "Conteúdo do projeto",
     expandSite: "Expandir o site",
     closeSite: "Fechar",
     closeImage: "Fechar imagem",
@@ -103,6 +105,7 @@ const pt = {
     privateRepo: "Repositório privado",
     backToWork: "Projetos",
     nextProject: "Projeto seguinte",
+    backToSite: "Voltar ao site",
   },
   skills: {
     eyebrow: "Stack",
@@ -122,6 +125,8 @@ const pt = {
     workHeading: "Experiência profissional",
     educationHeading: "Educação",
     certificationsHeading: "Certificações",
+    viewCredential: "Ver credencial",
+    watchVideo: "Ver vídeo",
     extrasHeading: "Atividades extracurriculares",
   },
   contact: {
@@ -198,7 +203,6 @@ const en: Dictionary = {
     back: "Back",
   },
   hero: {
-    status: "Available for new projects",
     role: "Full Stack Developer",
     headline: "I build web software that works well and feels better.",
     intro:
@@ -209,7 +213,7 @@ const en: Dictionary = {
   },
   home: {
     workHeading: "Selected projects",
-    workSub: "Four projects that sum up how I work.",
+    workSub: "Five projects that sum up how I work.",
     viewAllWork: "See all projects",
     ctaHeading: "Let's build something?",
     ctaBody:
@@ -252,6 +256,9 @@ const en: Dictionary = {
     appScreens: "The app",
     onTheWeb: "On the web",
     liveSite: "The live site",
+    videos: "On video",
+    liveTab: "Live",
+    mediaLabel: "Project media",
     expandSite: "Expand the site",
     closeSite: "Close",
     closeImage: "Close image",
@@ -260,6 +267,7 @@ const en: Dictionary = {
     privateRepo: "Private repository",
     backToWork: "Work",
     nextProject: "Next project",
+    backToSite: "Back to the site",
   },
   skills: {
     eyebrow: "Stack",
@@ -278,6 +286,8 @@ const en: Dictionary = {
     workHeading: "Professional experience",
     educationHeading: "Education",
     certificationsHeading: "Certifications",
+    viewCredential: "View credential",
+    watchVideo: "Watch video",
     extrasHeading: "Extracurricular",
   },
   contact: {

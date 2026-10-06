@@ -22,11 +22,7 @@ export function Contact({ dict }: { dict: Dictionary }) {
 
   return (
     <Section id="contact" tone="subtle">
-      <SectionHeading
-        eyebrow={dict.contact.eyebrow}
-        heading={dict.contact.heading}
-        subheading={dict.contact.subheading}
-      />
+      <SectionHeading eyebrow={dict.contact.eyebrow} heading={dict.contact.heading} />
 
       <div className="mt-12 grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-14">
         <Reveal>
@@ -58,11 +54,22 @@ export function Contact({ dict }: { dict: Dictionary }) {
         </Reveal>
 
         <Reveal delay={80}>
+          {/* An invisible twin of the "Direct" label, so the form's top edge
+              lines up with the list beside it rather than with its heading. */}
+          <p aria-hidden className="type-label invisible mb-2.5 hidden lg:block">
+            {dict.contact.directHeading}
+          </p>
           <div className="rounded-[28px] bg-bg p-6 sm:p-8">
             <ContactForm labels={dict.contact.form} />
           </div>
         </Reveal>
       </div>
+
+      <Reveal>
+        <p className="mx-auto mt-14 max-w-xl text-pretty text-center text-[15px] leading-relaxed text-text-muted">
+          {dict.contact.subheading}
+        </p>
+      </Reveal>
     </Section>
   );
 }

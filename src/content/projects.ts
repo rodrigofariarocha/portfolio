@@ -14,6 +14,9 @@ type Localized = Record<Locale, string>;
  */
 export type Shot = { src: string; kind: "phone" | "web"; caption: Localized };
 
+/** A YouTube video, embedded on the project's page. `id` is the part after youtu.be/. */
+export type Video = { id: string; title: Localized; caption?: Localized };
+
 export type Project = {
   slug: string;
   name: string;
@@ -28,6 +31,18 @@ export type Project = {
   stack: string[];
   /** The card's main image in the work grid, in place of the screenshots. */
   cover?: string;
+  /** The project's logo on a transparent background, shown small in the middle of its card. */
+  logo?: string;
+  /**
+   * The project's own brand colour. The card's panel is washed with a little of
+   * it, so a grid of screenshots reads as separate products rather than one grey.
+   */
+  accent?: string;
+  /**
+   * Something a visitor should know before clicking through — a prototype with
+   * placeholder content, a host that sleeps. Shown above the links.
+   */
+  notice?: Localized;
   /** A live URL to embed, scrollable, on the project's page. Must allow framing. */
   embed?: string;
   repo?: string;
@@ -35,6 +50,7 @@ export type Project = {
   /** Anything else worth linking: a demo video, a report, a case study. */
   links?: { label: Localized; href: string }[];
   shots?: Shot[];
+  videos?: Video[];
 };
 
 export const projects: Project[] = [
@@ -44,12 +60,12 @@ export const projects: Project[] = [
     year: "2025 — 2026",
     featured: true,
     context: {
-      pt: "Começou como Prova de Aptidão Profissional (19/20) · hoje é um produto publicado",
-      en: "Started as my final course project (graded 19/20) · now a shipped product",
+      pt: "Prova de Aptidão Profissional — nota 19/20",
+      en: "Final course project — graded 19/20",
     },
     tagline: {
-      pt: "App de nutrição com IA — publicada na App Store e Google Play",
-      en: "AI nutrition app — shipped on the App Store and Google Play",
+      pt: "App de nutrição com IA para iOS e Android",
+      en: "AI nutrition app for iOS and Android",
     },
     description: {
       pt: "Nasceu como projeto final de curso e cresceu para um produto completo: uma app Flutter para iOS e Android, um site de marketing em Astro, documentação própria e uma biblioteca de componentes partilhada entre a app e a web. Faz tracking de macros em tempo real, gere a despensa e usa o MacroAI — um assistente construído sobre o Gemini — para gerar planos alimentares e responder a perguntas de nutrição. Tem plano gratuito e subscrição Premium com pagamentos via Stripe.",
@@ -88,7 +104,8 @@ export const projects: Project[] = [
       "Stripe",
       "Hive",
     ],
-    // cover: "/projects/macromath/cover.png",
+    accent: "#f26a2e",
+    logo: "/projects/macromath/logo.png",
     embed: "https://macromath.app/",
     repo: "https://github.com/rodrigofariarocha/macromath_app",
     live: "https://macromath.app",
@@ -100,6 +117,20 @@ export const projects: Project[] = [
       {
         label: { pt: "Design system", en: "Design system" },
         href: "https://ui.macromath.app/en",
+      },
+      {
+        label: { pt: "Versão em WordPress (vídeo)", en: "WordPress version (video)" },
+        href: "https://youtu.be/bsuSkmbnwQg",
+      },
+    ],
+    videos: [
+      {
+        id: "bsuSkmbnwQg",
+        title: { pt: "MacroMath em WordPress", en: "MacroMath on WordPress" },
+        caption: {
+          pt: "Um projeto à parte do curso: o site da MacroMath construído em WordPress com Elementor.",
+          en: "A side project outside the course: the MacroMath site built on WordPress with Elementor.",
+        },
       },
     ],
     shots: [
@@ -197,11 +228,83 @@ export const projects: Project[] = [
       "TMDB API",
       "Google Gemini",
     ],
+    accent: "#e5383b",
+    logo: "/projects/rochacinema/reel.png",
+    notice: {
+      pt: "O site está alojado no plano gratuito do Render: depois de algum tempo parado, pode demorar cerca de um minuto a abrir ou nem chegar a carregar. O vídeo mostra a plataforma a funcionar.",
+      en: "The site runs on Render's free tier: after a while idle it can take about a minute to wake up, or fail to load at all. The video shows the platform working.",
+    },
     live: "https://cinemarocha.onrender.com/",
     // Render's free tier sleeps after inactivity, so a cold frame can sit blank
     // for the best part of a minute before the first paint.
     embed: "https://cinemarocha.onrender.com/",
     repo: "https://github.com/rodrigofariarocha/cinema-management-system-project",
+    links: [
+      {
+        label: { pt: "Vídeo da plataforma a funcionar", en: "Video of the platform working" },
+        href: "https://youtu.be/9b83SSFDqhI",
+      },
+    ],
+    videos: [
+      {
+        id: "9b83SSFDqhI",
+        title: { pt: "RochaCinema a funcionar", en: "RochaCinema in action" },
+        caption: {
+          pt: "Gravado a correr localmente, para quando o link online não abrir.",
+          en: "Recorded running locally, for when the online link won't open.",
+        },
+      },
+    ],
+  },
+  {
+    slug: "bedsgone",
+    name: "Bedsgone",
+    year: "2026",
+    featured: true,
+    context: {
+      pt: "Protótipo feito para um cliente",
+      en: "Prototype built for a client",
+    },
+    tagline: {
+      pt: "Site de recolha de colchões, com cena 3D e reservas com preço em tempo real",
+      en: "Mattress pickup website, with a 3D hero and bookings priced live",
+    },
+    description: {
+      pt: "Um cliente pediu um site para um serviço de recolha e reciclagem de colchões, e este é o protótipo que construí para lhe mostrar a direção: a marca, o aspeto, o modelo de preços e o fluxo de reserva. A proposta é simples — dois preços fixos, e o tamanho, tipo ou idade do colchão nunca mudam o que se paga. Tem uma landing page com uma cena 3D feita à mão em three.js e um assistente de reserva em cinco passos com o preço a atualizar ao vivo.",
+      en: "A client asked for a website for a mattress pickup and recycling service, and this is the prototype I built to show them the direction: the brand, the look, the pricing model and the booking flow. The pitch is simple — two flat prices, and a mattress's size, type or age never changes what you pay. It has a landing page with a hand-built three.js scene and a five-step booking wizard whose price updates live.",
+    },
+    role: {
+      pt: "Projeto individual — marca, design e frontend",
+      en: "Solo project — brand, design and front end",
+    },
+    highlights: {
+      pt: [
+        "Cena 3D em three.js construída só com geometria, sem modelos: a carrinha entra, o colchão cai na caixa e o scroll leva-a embora",
+        "three.js carregado com import() dinâmico e só depois de confirmar suporte a WebGL",
+        "Assistente de reserva em cinco passos com preço ao vivo, rascunho guardado em localStorage e deep links que pré-preenchem o formulário",
+        "Preços, taxas, horários e zonas num único ficheiro de configuração, com o cálculo em funções puras prontas para correr num servidor",
+        "Sistema de animação com GSAP e Lenis, desligado por completo com prefers-reduced-motion",
+        "Marca refeita em SVG, tokens de cor no @theme do Tailwind 4 e output 100% estático",
+      ],
+      en: [
+        "A three.js scene built from geometry alone, no model files: the truck drives in, the mattress drops into the bed and scrolling drives it away",
+        "three.js loaded through a dynamic import() and only after a WebGL check",
+        "Five-step booking wizard with a live price, drafts saved to localStorage and deep links that pre-fill the form",
+        "Prices, fees, time windows and service areas in one config file, with the maths in pure functions ready to run on a server",
+        "A GSAP and Lenis motion system, switched off entirely under prefers-reduced-motion",
+        "The brand rebuilt as SVG, colour tokens in Tailwind 4's @theme, and fully static output",
+      ],
+    },
+    stack: ["Astro", "TypeScript", "Tailwind CSS", "three.js", "GSAP", "Lenis"],
+    accent: "#ff6a1f",
+    notice: {
+      pt: "Protótipo para um cliente, não um negócio real. Nenhuma reserva é enviada ou cobrada, e os contactos, testemunhos e zona de serviço são conteúdo de exemplo.",
+      en: "A client prototype, not a live business. No booking is sent or charged, and the contact details, testimonials and service area are placeholders.",
+    },
+    live: "https://bedsgone-prototype.vercel.app/",
+    embed: "https://bedsgone-prototype.vercel.app/",
+    repo: "https://github.com/rodrigofariarocha/bedsgone-prototype",
+    logo: "/projects/bedsgone/logo.svg",
   },
   {
     slug: "hardware-diagnostics",
@@ -243,6 +346,8 @@ export const projects: Project[] = [
       ],
     },
     stack: ["Astro", "React", "TypeScript", "Tailwind CSS", "Python", "Debian", "Linux"],
+    accent: "#10b981",
+    logo: "/projects/hardware-diagnostics/logo.svg",
     live: "https://csv-convert-virid.vercel.app/",
     embed: "https://csv-convert-virid.vercel.app/",
     // The team's repository, not mine — the role above says as much.
@@ -254,8 +359,8 @@ export const projects: Project[] = [
     year: "2026",
     featured: false,
     context: {
-      pt: "Loja online construída para a minha mãe",
-      en: "Online shop built for my mother",
+      pt: "Protótipo de loja online para o negócio da minha mãe",
+      en: "Online shop prototype for my mother's business",
     },
     tagline: {
       pt: "E-commerce de cosmética e perfumaria, com painel de administração e IA",
@@ -296,5 +401,14 @@ export const projects: Project[] = [
       "PostgreSQL",
       "Google Gemini",
     ],
+    accent: "#c9a227",
+    logo: "/projects/sf-cosmetics/logo.png",
+    notice: {
+      pt: "Ainda é um protótipo: não está a ser usado por clientes reais, e nenhuma encomenda é processada.",
+      en: "Still a prototype: it is not used by real customers, and no order is processed.",
+    },
+    live: "https://sf-cosmetics.vercel.app/",
+    embed: "https://sf-cosmetics.vercel.app/",
+    repo: "https://github.com/rodrigofariarocha/sf_cosmetics",
   },
 ];

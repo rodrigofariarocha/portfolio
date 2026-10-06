@@ -32,7 +32,7 @@ export function ProjectTile({
       href={`/${locale}/work/${project.slug}`}
       className="group flex h-full flex-col gap-5 rounded-[24px] bg-bg-subtle p-4 transition-transform duration-300 ease-(--ease-out) sm:p-5 md:hover:-translate-y-1"
     >
-      <ProjectVisual project={project} locale={locale} />
+      <ProjectVisual project={project} />
 
       <div className="flex flex-1 flex-col px-1 pb-1">
         <p className="flex items-center gap-2.5 text-[12px] text-text-faint">

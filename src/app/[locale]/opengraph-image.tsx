@@ -40,14 +40,8 @@ export default async function OpengraphImage({
           fontFamily: "sans-serif",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <div
-            style={{ width: 10, height: 10, borderRadius: 999, backgroundColor: "#34d399" }}
-          />
-          <div style={{ fontSize: 22, color: "#86868b", letterSpacing: 2 }}>
-            {dict.hero.status.toUpperCase()}
-          </div>
-        </div>
+        {/* Holds the top slot, so the name stays centred between it and the footer row. */}
+        <div style={{ display: "flex", height: 22 }} />
 
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
           <div

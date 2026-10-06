@@ -1,16 +1,13 @@
 import Image from "next/image";
 
-import { ShotGallery } from "@/components/shot-gallery";
 import type { Project } from "@/content/projects";
-import type { Locale } from "@/lib/i18n/config";
-import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 /**
  * The panel beside each project.
  *
  * Real screenshots win when a project has them. Where there are none yet, a
  * purpose-built illustration draws what the project actually does — a seat
- * map, macro rings, a diagnostics run, a migration — rather than standing in
+ * map, macro rings, a diagnostics run, a storefront — rather than standing in
  * with a decorative gradient.
  *
  * The draw-in animations key off `[data-visible]`, which the Reveal wrapper
@@ -18,37 +15,69 @@ import type { Dictionary } from "@/lib/i18n/dictionaries";
  */
 export function ProjectVisual({
   project,
-  locale,
   variant = "tile",
 }: {
   project: Project;
-  locale: Locale;
   /** "tile" locks every panel to one aspect so a grid of cards lines up. */
   variant?: "tile" | "full";
 }) {
-  // In the grid a card shows its cover and nothing else. Without one it stays
-  // deliberately blank — a placeholder waiting for the image that belongs
-  // there, rather than a thumbnail standing in for it.
-  if (variant === "tile") {
-    return (
-      <div className="relative aspect-[5/4] w-full overflow-hidden rounded-2xl bg-bg">
-        {project.cover ? (
-          <Image
-            src={project.cover}
-            alt={project.name}
-            fill
-            sizes="(max-width: 640px) 90vw, 420px"
-            className="object-cover"
-          />
-        ) : null}
+  if (variant === "tile") return <Tile project={project} />;
+
+  return <AbstractPanel slug={project.slug} />;
+}
+
+/**
+ * A card's panel in the work grid, always 5:4 so the grid lines up.
+ *
+ * The project's logo sits small in the middle, on its own, on a panel washed
+ * with a little of the project's brand colour. Without a logo, the cover image or the illustration stands in.
+ */
+function Tile({ project }: { project: Project }) {
+  const Visual = ILLUSTRATIONS[project.slug];
+
+  let content: React.ReactNode = null;
+
+  if (project.logo) {
+    content = <LogoMark src={project.logo} name={project.name} />;
+  } else if (project.cover) {
+    content = (
+      <Image
+        src={project.cover}
+        alt={project.name}
+        fill
+        sizes="(max-width: 640px) 90vw, 460px"
+        className="object-cover"
+      />
+    );
+  } else if (Visual) {
+    content = (
+      <div className="absolute inset-0 p-5 sm:p-6">
+        <Visual />
       </div>
     );
   }
 
-  return project.shots?.length ? (
-    <Gallery project={project} locale={locale} variant={variant} />
-  ) : (
-    <AbstractPanel slug={project.slug} />
+  return (
+    <div
+      className="tile-wash relative aspect-[5/4] w-full overflow-hidden rounded-2xl"
+      style={
+        project.accent
+          ? ({ "--tint": project.accent } as React.CSSProperties)
+          : undefined
+      }
+    >
+      {content}
+    </div>
+  );
+}
+
+function LogoMark({ src, name }: { src: string; name: string }) {
+  return (
+    <div className="absolute inset-0 grid place-items-center">
+      <div className="relative size-24 drop-shadow-[0_8px_18px_rgba(0,0,0,0.12)] transition-transform duration-500 ease-(--ease-out) sm:size-28 md:group-hover:-translate-y-1.5 md:group-hover:scale-[1.04]">
+        <Image src={src} alt={name} fill sizes="112px" className="object-contain" />
+      </div>
+    </div>
   );
 }
 
@@ -58,6 +87,7 @@ export function ProjectVisual({
  */
 const ILLUSTRATIONS: Record<string, () => React.ReactElement> = {
   macromath: MacroRings,
+  rochacinema: SeatMap,
   "hardware-diagnostics": DiagnosticsTerminal,
   "sf-cosmetics": Storefront,
 };
@@ -112,112 +142,50 @@ function Storefront() {
 }
 
 /* --------------------------------------------------------------------------
-   Screenshots
+   RochaCinema — picking seats in a room
    -------------------------------------------------------------------------- */
-const PHONE_ASPECT = "aspect-[828/1792]";
-const FRAME = "relative overflow-hidden rounded-xl bg-bg ring-1 ring-[var(--hairline)]";
+function SeatMap() {
+  const rows = 6;
+  const columns = 10;
+  // Seats already sold, and the two being picked, as "row-column".
+  const taken = new Set(["0-2", "0-3", "1-6", "1-7", "2-0", "2-1", "3-4", "3-8", "4-2", "4-3", "4-4", "5-7", "5-8"]);
+  const picked = new Set(["2-4", "2-5"]);
 
-function Gallery({
-  project,
-  locale,
-  variant,
-}: {
-  project: Project;
-  locale: Locale;
-  variant: "tile" | "full";
-}) {
-  const shots = project.shots ?? [];
-  const phones = shots.filter((shot) => shot.kind === "phone");
-  const webs = shots.filter((shot) => shot.kind === "web");
-
-  // In a tile every panel is boxed to the shared 5:4 so a grid of cards lines
-  // up. Phone screens are narrow enough to sit three abreast; a browser shot
-  // gets one, cropped to fill, because three would each be a postage stamp.
-  if (variant === "tile") {
-    if (phones.length > 0) {
-      return (
-        <div className="flex aspect-[5/4] w-full items-center justify-center gap-2.5 overflow-hidden rounded-2xl bg-bg p-4">
-          {phones.slice(0, 3).map((shot) => (
-            <div key={shot.src} className={`${FRAME} ${PHONE_ASPECT} h-full w-auto`}>
-              <Image
-                src={shot.src}
-                alt={shot.caption[locale]}
-                fill
-                sizes="140px"
-                className="object-cover object-top"
-              />
-            </div>
-          ))}
-        </div>
-      );
-    }
-
-    const [first] = webs;
-    return (
-      <div className="relative aspect-[5/4] w-full overflow-hidden rounded-2xl bg-bg">
-        <Image
-          src={first.src}
-          alt={first.caption[locale]}
-          fill
-          sizes="(max-width: 640px) 90vw, 420px"
-          className="object-cover object-left-top"
-        />
+  return (
+    <div className="flex h-full flex-col items-center justify-center gap-5">
+      <div className="w-4/5">
+        <div className="h-1.5 rounded-full bg-[var(--tint,var(--text))] opacity-80" />
+        <div className="mx-auto mt-1 h-6 w-full bg-gradient-to-b from-[color-mix(in_oklab,var(--tint,var(--text))_22%,transparent)] to-transparent [clip-path:polygon(0_0,100%_0,90%_100%,10%_100%)]" />
       </div>
-    );
-  }
 
-  return null;
-}
+      <div className="grid gap-1.5" style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}>
+        {Array.from({ length: rows * columns }, (_, index) => {
+          const row = Math.floor(index / columns);
+          const column = index % columns;
+          const key = `${row}-${column}`;
+          const state = picked.has(key) ? "picked" : taken.has(key) ? "taken" : "free";
+          return (
+            <span
+              key={key}
+              className={`size-3.5 rounded-t-[5px] rounded-b-[2px] sm:size-4 ${
+                column === 5 ? "ml-2" : ""
+              } ${
+                state === "picked"
+                  ? "bg-[var(--tint,var(--text))]"
+                  : state === "taken"
+                    ? "bg-border-strong"
+                    : "bg-bg ring-1 ring-inset ring-[var(--hairline)]"
+              }`}
+              style={{ animation: `rise 400ms var(--ease-out) ${row * 60 + 200}ms both` }}
+            />
+          );
+        })}
+      </div>
 
-/**
- * The screens on a project's own page: contained thumbnails under a heading,
- * not full-width slabs. A screenshot blown up to the column width dominates the
- * page without saying any more than a small one does.
- */
-export function ProjectShots({
-  project,
-  locale,
-  labels,
-}: {
-  project: Project;
-  locale: Locale;
-  labels: Dictionary["projects"];
-}) {
-  const shots = project.shots ?? [];
-  const phones = shots.filter((shot) => shot.kind === "phone");
-  const webs = shots.filter((shot) => shot.kind === "web");
-
-  if (shots.length === 0) return null;
-
-  const chrome = {
-    closeLabel: labels.closeImage,
-    previousLabel: labels.previousImage,
-    nextLabel: labels.nextImage,
-  };
-
-  return (
-    <div className="space-y-12">
-      {phones.length > 0 ? (
-        <ShotGroup title={labels.appScreens}>
-          <ShotGallery shots={phones} locale={locale} kind="phone" {...chrome} />
-        </ShotGroup>
-      ) : null}
-
-      {webs.length > 0 ? (
-        <ShotGroup title={labels.onTheWeb}>
-          <ShotGallery shots={webs} locale={locale} kind="web" {...chrome} />
-        </ShotGroup>
-      ) : null}
+      <p className="tabular rounded-full bg-bg px-3 py-1 text-[11px] text-text-muted shadow-sm">
+        Sala 2 · Fila C · 5–6
+      </p>
     </div>
-  );
-}
-
-function ShotGroup({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <section>
-      <h2 className="type-label mb-5 text-center text-text-faint">{title}</h2>
-      {children}
-    </section>
   );
 }
 
