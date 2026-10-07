@@ -289,7 +289,9 @@ export default async function ProjectPage({
 
 function VideoList({ videos, locale }: { videos: Video[]; locale: Locale }) {
   return (
-    <div className="mx-auto max-w-3xl space-y-8">
+    // A gap, not space-y: each <figure> resets its margins with m-0, which
+    // would cancel the margin space-y relies on.
+    <div className="mx-auto flex max-w-3xl flex-col gap-14">
       {videos.map((video) => (
         <figure key={video.id} className="m-0">
           <div className="overflow-hidden rounded-2xl bg-black ring-1 ring-[var(--hairline)]">
@@ -303,7 +305,7 @@ function VideoList({ videos, locale }: { videos: Video[]; locale: Locale }) {
               className="block aspect-video w-full border-0"
             />
           </div>
-          <figcaption className="mt-3 text-center text-[13px] text-text-muted">
+          <figcaption className="mt-4 text-center text-[13px] text-text-muted">
             <span className="font-medium text-text">{video.title[locale]}</span>
             {video.caption ? <> — {video.caption[locale]}</> : null}
           </figcaption>
